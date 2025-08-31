@@ -56,3 +56,6 @@ qemu-system-i386 build/out
 
 <img width="1197" height="602" alt="Screenshot 2025-08-30 at 17 45 02" src="https://github.com/user-attachments/assets/37d732a5-7466-4c76-b371-00fbaef3f973" />
 
+### Contribution
+
+#### add me on dc my username is anarbyte
