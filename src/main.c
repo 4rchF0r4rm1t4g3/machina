@@ -50,12 +50,17 @@ int main(int argc, char *argv[])
 
     while(1)
     {
-            if(buffer[c] != ' ')
+        if(buffer[c1] == '\n')
         {
             break;
         }
 
-        ++c;
+        if(buffer[c1] != ' ')
+        {
+            break;
+        }
+
+        ++c1;
     }
 
     int d = 0;
@@ -92,11 +97,16 @@ int main(int argc, char *argv[])
         code[510] = 0x55;
         code[511] = 0xAA;
     }
+
+    else
+    {
+        printf("unable to understand given command: %s\n", buff);
+    }
     
 
     while(fgets(buffer, 4096, fptr))
     {
-
+        int u = 0;
         char buf[4096];
 
         int buflen = strlen(buffer);
@@ -146,16 +156,18 @@ int main(int argc, char *argv[])
             buf[c+d] = '\0';
         }
 
-        if(strncmp("i10", buf, 3) == 0)
+        if(strcmp("i10", buf) == 0)
         {
+            u = 1;
             code[by] = 0xCD;
             by++;
             code[by] = 0x10;
             by++;
         }
 
-        if(strncmp("i16", buf, 3) == 0)
+        if(strcmp("i16", buf) == 0)
         {
+            u = 1;
             code[by] = 0xCD;
             by++;
             code[by] = 0x16;
@@ -164,6 +176,7 @@ int main(int argc, char *argv[])
         
         if(strncmp("ax", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -265,9 +278,9 @@ int main(int argc, char *argv[])
 
             else
             {
-                code[by] = axb1;
-                by++;
                 code[by] = 0x00;
+                by++;
+                code[by] = axb1;
                 by++;
             }
 
@@ -277,6 +290,7 @@ int main(int argc, char *argv[])
 
         if(strncmp("ah", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -368,6 +382,7 @@ int main(int argc, char *argv[])
 
         if(strncmp("al", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -460,6 +475,7 @@ int main(int argc, char *argv[])
 
         if(strncmp("bl", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -553,6 +569,7 @@ int main(int argc, char *argv[])
 
         if(strncmp("bh", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -645,6 +662,7 @@ int main(int argc, char *argv[])
 
         if(strncmp("bx", buf, 2) == 0)
         {
+            u = 1;
             int e = d+c;
             int emod = e;
 
@@ -748,14 +766,19 @@ int main(int argc, char *argv[])
 
             else
             {
-                code[by] = axb1;
-                by++;
                 code[by] = 0x00;
+                by++;
+                code[by] = axb1;
                 by++;
             }
 
             bxend:
             nop();
+        }
+
+        if((u == 0) && (buf[0] != '\0') && (buf[0] != ' ') && (buf[0] != '\n') && (buf[0] != '\r'))
+        {
+            printf("error no such keyword or function\n");
         }
 
     }
